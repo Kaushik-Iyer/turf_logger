@@ -1,0 +1,11 @@
+/node_modules
+
+/venv
+/.venv
+*.log
+
+.env
+fake.py
+/__pycache__
+/backend/app/__pycache__
+/backend/app/routers/__pycache__
