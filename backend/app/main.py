@@ -39,8 +39,8 @@ origins = [
 ]
 app.include_router(players.router)
 app.include_router(comparisons.router)
-app.add_middleware(SessionMiddleware, secret_key="secret-string")
 app.add_middleware(CORSMiddleware, allow_origins=origins, allow_credentials=True, allow_methods=["*"], allow_headers=["*"])
+app.add_middleware(SessionMiddleware, secret_key="secret-string")
 config=Config('.env')
 oauth=OAuth(config)
 oauth.register(
@@ -85,7 +85,7 @@ async def auth(request: Request):
 @app.get('/logout')
 async def logout(request: Request):
     request.session.pop('user', None)
-    return 'Logged out'
+    return {"message": "Logged out"}
 
 @app.get('/user')
 async def user(request: Request):

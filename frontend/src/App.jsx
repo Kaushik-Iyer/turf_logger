@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Route, Navigate, Routes } from 'react-router-dom';
 import LoginPage from './Login';
 import PlayersPage from './Players'; // Import your PlayersPage component
+import LogoutPage from './Logout'; // Import your LogoutPage component
+import Header from './Header';
 
 function App() {
     const [redirectTo, setRedirectTo] = useState('');
@@ -27,9 +29,11 @@ function App() {
 
     return (
         <Router>
+            <Header />
             <Routes>
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="/players" element={<PlayersPage />} />
+                <Route path="/logout" element={<LogoutPage />} />
             </Routes>
             <Navigate to={redirectTo} />
         </Router>

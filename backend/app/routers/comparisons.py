@@ -6,7 +6,6 @@ from .temp import fix_object_id, get_lat_long, maps_api_key
 import requests
 import pandas as pd
 import os
-import pdb
 
 def get_db(request: Request):
     db = request.app.state.client["TestDB"]
@@ -50,25 +49,6 @@ async def get_player_leaderboard(period: str, db=Depends(get_db)):
 async def get_turf_near_me(db=Depends(get_db)):
     lat, long = get_lat_long()
 
-    #first search for football turfs nearby from the database
-    #if not found, then make an API call to the Google Places API
-    #and save the results in the database
-
-    # local_turfs = db["turfs"]
-    # turfs = local_turfs.find({
-    #     "location": {
-    #         "$near": {
-    #             "$geometry": {
-    #                 "type": "Point",
-    #                 "coordinates": [long, lat]
-    #             },
-    #             "$maxDistance": 2500  # Distance in meters
-    #         }
-    #     }
-    # })
-    # if turfs:
-    #     return turfs
-
     base_url=f'https://places.googleapis.com/v1/places:searchText'
     params={
         'key':maps_api_key,
@@ -106,7 +86,7 @@ async def get_turf_near_me(db=Depends(get_db)):
 
 @router.get("/players/{day}/{month}/{goals}/{assists}")
 async def get_players(day: int, month: int, goals: int, assists: int):
-    df=pd.read_csv('appearances.csv')
+    df=pd.read_csv('backend/appearances.csv')
     df['date'] = pd.to_datetime(df['date'])
     df['month_day'] = df['date'].apply(lambda x: (x.month, x.day))
     filtered_df = df[df['month_day'] == (month, day)]
@@ -122,7 +102,7 @@ async def get_players(day: int, month: int, goals: int, assists: int):
         return {"player": "No player found", "home_team": "No team found", "away_team": "No team found"}
 
     # Load the other CSV file
-    df2 = pd.read_csv('games.csv')
+    df2 = pd.read_csv('backend/games.csv')
 
     # Find the row with the matching game_id
     game_row = df2[df2['game_id'] == game_id].iloc[0]
@@ -130,9 +110,10 @@ async def get_players(day: int, month: int, goals: int, assists: int):
     # Get the home_team_name and away_team_name
     home_team_name = game_row['home_club_name']
     away_team_name = game_row['away_club_name']
+    date=game_row['date']
 
 
-    return {"player": first_player, "home_team": home_team_name, "away_team": away_team_name}
+    return {"player": first_player, "home_team": home_team_name, "away_team": away_team_name, "date": date}
 
 
 #API to return live match scores

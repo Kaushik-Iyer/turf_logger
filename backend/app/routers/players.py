@@ -16,11 +16,12 @@ def get_db(request: Request):
 
 router = APIRouter()
 
-@router.post("/players")
-async def create_player(player: Player, db=Depends(get_db)):
+@router.post("/entries")
+async def create_player(player: Player, db=Depends(get_db),user=Depends(get_current_user)):
     collection = db["entries"]
     player_data = player.model_dump()
     player_data["created_at"] = datetime.now()
+    player_data["email"] = user['email']
     result = await collection.insert_one(player_data)
     return {"id": str(result.inserted_id)}
 
@@ -28,7 +29,7 @@ async def create_player(player: Player, db=Depends(get_db)):
 async def get_players(db=Depends(get_db),user=Depends(get_current_user)):
     collection = db["entries"]
     players = []
-    async for player in collection.find():
+    async for player in collection.find({"email": user['email']}).sort("created_at", -1):
         players.append(fix_object_id(player))
     return players
 

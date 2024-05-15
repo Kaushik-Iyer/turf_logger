@@ -27,3 +27,10 @@ class Player(BaseModel):
     goals: int
     assists: int
 
+    def model_dump(self):
+        return {
+            "name": self.name,
+            "goals": self.goals,
+            "assists": self.assists
+        }
+
