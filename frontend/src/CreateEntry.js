@@ -72,28 +72,29 @@ function CreateEntry() {
 
     return (
         <div>
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                 <label>
                     Name:
-                    <input type="text" name="name" value={player.name} onChange={handleChange} />
+                    <input type="text" name="name" value={player.name} onChange={handleChange} style={{ padding: '5px' }} />
                 </label>
                 <label>
                     Goals:
-                    <input type="number" name="goals" value={player.goals} onChange={handleChange} />
+                    <input type="number" name="goals" value={player.goals} onChange={handleChange} style={{ padding: '5px' }} />
                 </label>
                 <label>
                     Assists:
-                    <input type="number" name="assists" value={player.assists} onChange={handleChange} />
+                    <input type="number" name="assists" value={player.assists} onChange={handleChange} style={{ padding: '5px' }} />
                 </label>
-                {error && <p>{error}</p>}
-                <button type="submit">Create Entry</button>
+                {error && <p style={{ color: 'red' }}>{error}</p>}
+                <button type="submit" style={{ padding: '10px', backgroundColor: '#007BFF', color: '#fff', border: 'none', borderRadius: '5px', cursor: 'pointer', width: 'fit-content' }}>Create Entry</button>
             </form>
-            {successMessage && <p>{successMessage}</p>} {/* Add this line */}
+            {successMessage && <p style={{ color: 'green' }}>{successMessage}</p>}
             {response && (
                 <p>
                     On this day, {response.player} also scored the same goals and assists in the match between {response.home_team} and {response.away_team} ({response.date}).
                 </p>
-            )}        </div>
+            )}
+        </div>
     );
 }
 

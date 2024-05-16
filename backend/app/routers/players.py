@@ -22,6 +22,18 @@ async def create_player(player: Player, db=Depends(get_db),user=Depends(get_curr
     player_data = player.model_dump()
     player_data["created_at"] = datetime.now()
     player_data["email"] = user['email']
+    # Find existing record with the same email and created_at
+    existing_record = await collection.find_one({
+        "email": user['email'],
+        "created_at": player_data["created_at"]
+    })
+    if existing_record: # Update the existing record
+        await collection.update_one({
+            "_id": existing_record["_id"]
+        }, {
+            "$set": player_data
+        })
+        return {"id": str(existing_record["_id"])}
     result = await collection.insert_one(player_data)
     return {"id": str(result.inserted_id)}
 

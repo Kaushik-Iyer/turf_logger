@@ -40,7 +40,7 @@ origins = [
 app.include_router(players.router)
 app.include_router(comparisons.router)
 app.add_middleware(CORSMiddleware, allow_origins=origins, allow_credentials=True, allow_methods=["*"], allow_headers=["*"])
-app.add_middleware(SessionMiddleware, secret_key="secret-string")
+app.add_middleware(SessionMiddleware, secret_key= os.getenv('SECRET_KEY'))
 config=Config('.env')
 oauth=OAuth(config)
 oauth.register(
