@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import FootballPitch from './FootballPitch';
 
 function CreateEntry() {
     const [player, setPlayer] = useState({ name: '', goals: 0, assists: 0 });
